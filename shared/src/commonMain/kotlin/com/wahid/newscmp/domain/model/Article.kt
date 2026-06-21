@@ -1,5 +1,6 @@
 package com.wahid.newscmp.domain.model
 
+
 data class Article(
     val id: String,
     val author: String,

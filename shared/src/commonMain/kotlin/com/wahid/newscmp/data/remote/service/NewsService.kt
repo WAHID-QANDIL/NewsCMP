@@ -1,4 +1,4 @@
-package com.wahid.newscmp.data.remote
+package com.wahid.newscmp.data.remote.service
 
 import com.wahid.newscmp.data.remote.dto.NewsResponse
 import com.wahid.newscmp.utils.getQueryUrlString

@@ -1,4 +1,4 @@
-package com.wahid.newscmp.data.remote
+package com.wahid.newscmp.data.remote.datasource
 
 import com.wahid.newscmp.data.remote.dto.NewsResponse
 
