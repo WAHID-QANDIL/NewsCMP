@@ -22,6 +22,9 @@ kspApi = "2.3.6"
 moshiKotlinCodegen = "1.15.2"
 material = "1.10.0"
 jetbrainsKotlinJvm = "2.4.0"
+room = "2.8.4"
+sqlite = "2.6.2"
+kermit = "2.0.5"
 
 
 
@@ -52,9 +55,13 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSeralization" }
 #metro-compiler = { module = "dev.zacsweers.metro:compiler", version.ref = "metro" }
-ksp-api = { group = "com.google.devtools.ksp",name = "symbol-processing-api", version.ref = "kspApi" }
-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
+#Room3
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+#androidx-room-sqlite-wrapper = { module = "androidx.room:room-sqlite-wrapper", version.ref = "room" }
 
 
 [plugins]
@@ -67,4 +74,4 @@ kotlinx-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", versi
 metro-di = {id = "dev.zacsweers.metro", version.ref = "metro"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 android-library = { id = "com.android.library", version.ref = "agp" }
-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
