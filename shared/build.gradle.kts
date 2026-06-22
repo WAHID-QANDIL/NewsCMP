@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -26,6 +25,11 @@ kotlin {
             isStatic = true
         }
     }
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xexplicit-backing-fields")
+    }
+
 
     androidLibrary {
         namespace = "com.wahid.newscmp.shared"
@@ -60,12 +64,23 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            //navigation
+            implementation(libs.jetbrains.navigation3.ui)
+            implementation(libs.jetbrains.material3.adaptiveNavigation3)
+            implementation(libs.jetbrains.lifecycle.viewmodelNavigation3)
+
             //Ktor
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.logging)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlinx.serialization)
+
+            //Metro
+            implementation(libs.metro.viewmodel)
+
+            //Coil3
+            implementation(libs.bundles.coil)
 
 
             //Room3
@@ -74,6 +89,14 @@ kotlin {
 
             //logger
             implementation(libs.kermit)
+
+
+
+
+            implementation(libs.icons.material.symbols.outlined.cmp)
+
+            // Lucide Icons (1.6k icons)
+            implementation(libs.icons.lucide.cmp)
 
 
         }
