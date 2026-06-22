@@ -5,7 +5,6 @@ import com.wahid.newscmp.data.remote.datasource.NewsRemoteDatasource
 import com.wahid.newscmp.di.IODispatcher
 import com.wahid.newscmp.domain.model.Article
 import com.wahid.newscmp.domain.repository.NewsRepository
-import com.wahid.newscmp.mappers.getCacheKey
 import com.wahid.newscmp.mappers.toDatabaseEntity
 import com.wahid.newscmp.mappers.toDomainModel
 import com.wahid.newscmp.utils.getOrThrow
@@ -48,7 +47,7 @@ class NesRepositoryImpl(
             .articles
             ?.mapNotNull {
                 it
-            }
+            }?.filter { it.url?.isNotEmpty() == true }
             ?: run {
                 emit(emptyList())
                 return@flow
@@ -62,7 +61,7 @@ class NesRepositoryImpl(
         newsLocalDatasource.insert(
             articles.map { article ->
                 article.toDatabaseEntity(
-                    isFavorite = article.getCacheKey() in existingFavorites
+                    isFavorite = article.source?.id in existingFavorites
                 )
             }
         )
