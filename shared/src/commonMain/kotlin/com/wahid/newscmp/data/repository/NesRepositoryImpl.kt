@@ -8,6 +8,7 @@ import com.wahid.newscmp.domain.repository.NewsRepository
 import com.wahid.newscmp.mappers.getCacheKey
 import com.wahid.newscmp.mappers.toDatabaseEntity
 import com.wahid.newscmp.mappers.toDomainModel
+import com.wahid.newscmp.utils.getOrThrow
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
@@ -43,7 +44,7 @@ class NesRepositoryImpl(
         }
 
         val articles = newsRemoteDatasource
-            .getAllNews(query = queryFilter)
+            .getAllNews(query = queryFilter).getOrThrow()
             .articles
             ?.mapNotNull {
                 it
@@ -76,7 +77,7 @@ class NesRepositoryImpl(
     */
     override fun getHeadLinesNews(queryFilter: Map<String, String>): Flow<List<Article>> = flow {
         val articles =
-            newsRemoteDatasource.getHeadlinesNews(query = queryFilter).articles?.mapNotNull { article ->
+            newsRemoteDatasource.getHeadlinesNews(query = queryFilter).getOrThrow().articles?.mapNotNull { article ->
                 article?.toDomainModel()
             }
         articles?.let {
