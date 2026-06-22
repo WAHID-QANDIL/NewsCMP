@@ -1,13 +1,16 @@
 package com.wahid.newscmp
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import co.touchlab.kermit.Logger
 import com.wahid.newscmp.di.AppGraph
+import com.wahid.newscmp.presentation.navigation.AppNavigationHost
 import dev.zacsweers.metro.createGraph
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 
 
 val appGraph = createGraph<AppGraph>()
@@ -18,18 +21,13 @@ val logger = Logger.withTag("NewsScreen")
 @Preview
 fun App() {
     MaterialTheme {
+        CompositionLocalProvider(
+            LocalMetroViewModelFactory provides appGraph.metroViewModelFactory
 
-        LaunchedEffect(Unit){
-            newsRepository.getAllNews(mapOf("q" to "bitcoin"),false)
-                .onEach { articles ->
-                    logger.d { "Articles count: ${articles.size}" }
-                    logger.d { "First: ${articles.firstOrNull()}" }
-                }
-                .catch { e -> logger.e(e) { "Flow error" } }
-                .collect { articles ->
-                    // update UI state
-                }
-
+        ) {
+            AppNavigationHost(
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
