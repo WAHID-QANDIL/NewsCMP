@@ -93,6 +93,8 @@ The project includes GitHub Actions workflows for automated builds:
 </p>
 <p align="center">
   <img src="screenshots/Screenshot_20260624_001354.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_005431.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_005442.png" width="30%" />
 </p>
 
 ## 🎬 Demo
