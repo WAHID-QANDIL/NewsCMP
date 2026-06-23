@@ -4,6 +4,22 @@ NewsCMP is a modern, cross-platform news application built with **Compose Multip
 ![src="screenshots/logo](screenshots/logo.png)
 
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="screenshots/Screenshot_20260624_001203.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001236.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001256.png" width="30%" />
+</p>
+<p align="center">
+  <img src="screenshots/Screenshot_20260624_001308.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001318.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001328.png" width="30%" />
+</p>
+<p align="center">
+  <img src="screenshots/Screenshot_20260624_001354.png" width="30%" />
+</p>
+
 ## 🚀 Features
 
 - **Top Headlines**: Stay updated with the latest news from various categories.
@@ -78,22 +94,6 @@ The project includes GitHub Actions workflows for automated builds:
 - `android.yml`: Android build and tests.
 - `ios.yml`: iOS build and framework generation.
 - `build.yml`: General multiplatform build check.
-
-## 📸 Screenshots
-
-<p align="center">
-  <img src="screenshots/Screenshot_20260624_001203.png" width="30%" />
-  <img src="screenshots/Screenshot_20260624_001236.png" width="30%" />
-  <img src="screenshots/Screenshot_20260624_001256.png" width="30%" />
-</p>
-<p align="center">
-  <img src="screenshots/Screenshot_20260624_001308.png" width="30%" />
-  <img src="screenshots/Screenshot_20260624_001318.png" width="30%" />
-  <img src="screenshots/Screenshot_20260624_001328.png" width="30%" />
-</p>
-<p align="center">
-  <img src="screenshots/Screenshot_20260624_001354.png" width="30%" />
-</p>
 
 ## 🎬 Demo
 
