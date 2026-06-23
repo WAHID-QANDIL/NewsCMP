@@ -3,7 +3,6 @@
 NewsCMP is a modern, cross-platform news application built with **Compose Multiplatform**. It provides a seamless news-reading experience across Android and iOS, leveraging a shared codebase for UI and business logic.
 ![src="screenshots/logo](screenshots/logo.png)
 
-
 ## 📸 Screenshots
 
 <p align="center">
@@ -18,8 +17,9 @@ NewsCMP is a modern, cross-platform news application built with **Compose Multip
 </p>
 <p align="center">
   <img src="screenshots/Screenshot_20260624_001354.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_005431.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_005442.png" width="30%" />
 </p>
-
 ## 🚀 Features
 
 - **Top Headlines**: Stay updated with the latest news from various categories.
@@ -94,6 +94,8 @@ The project includes GitHub Actions workflows for automated builds:
 - `android.yml`: Android build and tests.
 - `ios.yml`: iOS build and framework generation.
 - `build.yml`: General multiplatform build check.
+
+
 
 ## 🎬 Demo
 
