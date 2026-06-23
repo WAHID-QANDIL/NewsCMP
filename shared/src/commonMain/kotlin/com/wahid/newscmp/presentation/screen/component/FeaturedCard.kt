@@ -61,7 +61,7 @@ fun FeaturedCard(
                 model              = article.urlToImage,
                 contentDescription = article.title,
                 contentScale       = ContentScale.Crop,
-                modifier           = Modifier.fillMaxSize(),
+                modifier           = Modifier.fillMaxSize()
             )
 
             // Gradient scrim for text legibility
