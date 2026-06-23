@@ -4,17 +4,9 @@ import com.wahid.newscmp.data.local.room.entity.ArticleEntity
 import com.wahid.newscmp.domain.model.Article
 import kotlin.time.Clock
 
-/*fun com.wahid.newscmp.data.remote.dto.Article.getCacheKey(): String {
-    source?.id?.let {
-        return it
-    }
-    return "${hashCode() + Clock.System.now().nanosecondsOfSecond}"
-}*/
-
-
 fun com.wahid.newscmp.data.remote.dto.Article.toDomainModel(): Article {
     return Article(
-        id = source?.id?:"",
+        id = source?.id?:"NO ID",
         author = author ?: "No author info found",
         content = content ?: "No content",
         description = description ?: "No description",
@@ -27,7 +19,7 @@ fun com.wahid.newscmp.data.remote.dto.Article.toDomainModel(): Article {
     )
 }
 fun com.wahid.newscmp.data.remote.dto.Article.toDatabaseEntity( isFavorite: Boolean = false): ArticleEntity = ArticleEntity(
-    id = source?.id?: "",
+    id = source?.id?: "NO ID",
     isFavorite = isFavorite,
     author = author ?: "No author info found",
     content = content ?: "No content",
@@ -40,7 +32,19 @@ fun com.wahid.newscmp.data.remote.dto.Article.toDatabaseEntity( isFavorite: Bool
     source = source?.name ?: ""
 )
 
-
+fun Article.toDatabaseModel(): ArticleEntity = ArticleEntity(
+    id = id,
+    isFavorite = isFavorite,
+    author = author,
+    content = content,
+    description = description,
+    publishedAt = publishedAt,
+    title = title,
+    source = source,
+    url = url,
+    urlToImage = urlToImage,
+    lastUpdate = Clock.System.now()
+)
 fun ArticleEntity.toDomainModel(): Article = Article(
     id = id,
     author = author,
