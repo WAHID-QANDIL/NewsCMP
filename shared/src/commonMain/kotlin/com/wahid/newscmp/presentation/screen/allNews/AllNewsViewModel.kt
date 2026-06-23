@@ -2,7 +2,9 @@ package com.wahid.newscmp.presentation.screen.allNews
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wahid.newscmp.domain.usecase.AddToFavoriteUseCase
 import com.wahid.newscmp.domain.usecase.GetAllNewsUseCase
+import com.wahid.newscmp.domain.usecase.RemovefavoriteUseCase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -27,7 +29,9 @@ import kotlin.time.Duration.Companion.milliseconds
 @ViewModelKey(AllNewsViewModel::class)
 @Inject
 class AllNewsViewModel(
-    private val getAllNewsUseCase: GetAllNewsUseCase
+    private val getAllNewsUseCase: GetAllNewsUseCase,
+    private val addToFavoriteUseCase: AddToFavoriteUseCase,
+    private val removefavoriteUseCase: RemovefavoriteUseCase,
 ) : ViewModel() {
 
     private val localState = MutableStateFlow<AllNewsUIState>(AllNewsUIState())
@@ -36,7 +40,7 @@ class AllNewsViewModel(
 
     init {
         viewModelScope.launch {
-            state.map { it.searchQuery  }
+            state.map { it.searchQuery }
                 .debounce(2000.milliseconds)
                 .distinctUntilChanged()
                 .filter { it.isNotBlank() }
@@ -63,8 +67,21 @@ class AllNewsViewModel(
                     it.copy(searchQuery = intent.newQuery)
                 }
             }
+
+            is AllNewsIntent.AddToFavorite -> {
+                viewModelScope.launch {
+                    addToFavoriteUseCase(intent.article)
+                }
+            }
+
+            is AllNewsIntent.RemoveToFavorite -> {
+                viewModelScope.launch {
+                    removefavoriteUseCase(intent.article)
+                }
+            }
         }
     }
+
 
     private fun fetch(newQuery: Map<String, String>) {
         forceFetch(newQuery = newQuery, false)
