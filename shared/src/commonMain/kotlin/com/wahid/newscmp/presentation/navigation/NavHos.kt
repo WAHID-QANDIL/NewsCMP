@@ -43,12 +43,31 @@ fun AppNavigationHost(modifier: Modifier = Modifier) {
     val backStack = rememberNavBackStack(config, StackEntries.AllNews)
     var selectedTab by remember { mutableStateOf(NewsTab.ALL_NEWS) }
 
+    fun onNavigation(selectedTabf: NewsTab, newsTab: NewsTab) {
+        when {
+            newsTab == NewsTab.ALL_NEWS && newsTab != selectedTabf -> {
+                backStack.add(StackEntries.AllNews)
+            }
+
+            newsTab == NewsTab.HEADLINES && newsTab != selectedTabf -> {
+                backStack.add(StackEntries.Headlines)
+            }
+
+            newsTab == NewsTab.FAVORITES && newsTab != selectedTabf -> {
+                backStack.add(StackEntries.FavoriteNews)
+            }
+        }
+        selectedTab = newsTab
+
+
+    }
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
             NewsBottomBar(selectedTab = selectedTab, onTabSelected = {
-                selectedTab = it
-            })
+                onNavigation(selectedTabf = selectedTab, newsTab = it)
+            }
+            )
         },
         topBar = {
             NewsTopBar()
@@ -57,7 +76,9 @@ fun AppNavigationHost(modifier: Modifier = Modifier) {
         NavDisplay(
             modifier = modifier,
             backStack = backStack,
-            onBack = { backStack.removeLastOrNull() },
+            onBack = {
+                backStack.removeLastOrNull()
+            },
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator()
@@ -67,8 +88,6 @@ fun AppNavigationHost(modifier: Modifier = Modifier) {
                     val viewModel = metroViewModel<AllNewsViewModel>()
                     val state by viewModel.state.collectAsStateWithLifecycle()
                     AllNewsScreen(
-                        onNavigateToFavorites = { backStack.add(StackEntries.FavoriteNews) },
-                        onNavigateToHeadline = { backStack.add(StackEntries.Headlines) },
                         modifier = Modifier.fillMaxSize().statusBarsPadding().padding(
                             top = 70.dp
                         ),
@@ -89,7 +108,7 @@ fun AppNavigationHost(modifier: Modifier = Modifier) {
                                 )
                             )
                         },
-                        onSearch = { viewModel.onIntent(intent = AllNewsIntent.Search) },
+                        onSearch = { },
                     )
                 }
                 entry<StackEntries.Headlines> { entry ->
