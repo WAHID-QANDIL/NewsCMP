@@ -40,7 +40,7 @@ import com.wahid.newscmp.utils.Colors.ColorSurface
 
 
 @Composable
-private fun FeaturedCard(
+fun FeaturedCard(
     article: Article,
     onClick: () -> Unit,
     onBookmark: () -> Unit,
