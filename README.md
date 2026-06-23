@@ -1,31 +1,106 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# NewsCMP - Compose Multiplatform News App
 
-* [/iosApp](./iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+NewsCMP is a modern, cross-platform news application built with **Compose Multiplatform**. It provides a seamless news-reading experience across Android and iOS, leveraging a shared codebase for UI and business logic.
+![src="screenshots/logo](screenshots/logo.png)
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
 
-### Running the apps
+## 🚀 Features
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+- **Top Headlines**: Stay updated with the latest news from various categories.
+- **Category Filtering**: Filter news based on interests (Business, Tech, etc.).
+- **Search**: Find specific articles by keywords.
+- **Details Screen**: View detailed information about a specific news article.
+- **Favorites**: Save articles to a local database using **Room** for offline access.
+- **Responsive UI**: Custom components like `FeaturedCard`, `HeroHeadlineCard`, and `ArticleListItem`.
+- **Cross-Platform**: Unified logic and UI components across Android and iOS.
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- iOS app: open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+## 🛠 Tech Stack
 
-### Running tests
+- **UI Framework**: [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
+- **Networking**: [Ktor](https://ktor.io/) with custom `AuthPlugin` for API key management.
+- **Local Database**: [Room](https://developer.android.com/training/data-storage/room) (Multiplatform) for persistent storage.
+- **Dependency Injection**: [Metro](https://github.com/vimalansel/metro) for compile-time safe DI.
+- **Navigation**: [Jetpack Navigation 3](https://developer.android.com/guide/navigation) for multiplatform routing.
+- **Image Loading**: [Coil 3](https://coil-kt.github.io/coil/) for asynchronous image loading.
+- **Serialization**: [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization) for JSON handling.
+- **Logging**: [Kermit](https://github.com/touchlab/Kermit) for multiplatform logging.
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+## 🏗 Architecture
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- iOS tests: `./gradlew :shared:iosSimulatorArm64Test`
+The project follows **Clean Architecture** principles and the **MVVM** (Model-View-ViewModel) pattern:
 
----
+- **Data Layer**: Handles API requests (Ktor) and local persistence (Room).
+- **Domain Layer**: Contains pure business logic and **Use Cases** (e.g., `GetHeadlinesUseCase`, `AddToFavoriteUseCase`).
+- **Presentation Layer**: Built with Compose Multiplatform, organized by screens (Headlines, Search, Favorites, Details) and reusable UI components.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## 📂 Project Structure
+
+- **`shared`**: The core of the application.
+  - `commonMain`: Shared UI, Use Cases, Repositories, and DI logic.
+  - `androidMain`: Android-specific implementations (e.g., Database initialization).
+  - `iosMain`: iOS-specific implementations and native integration.
+- **`androidApp`**: Android application entry point.
+- **`iosApp`**: iOS application entry point (Xcode project).
+
+## ⚙️ Setup Instructions
+
+### Prerequisites
+
+- Android Studio (Ladybug or later)
+- Xcode (for iOS development)
+- A NewsAPI key from [NewsAPI.org](https://newsapi.org/)
+
+### Getting Started
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/NewsCMP.git
+   cd NewsCMP
+   ```
+
+2. **Add your API Key**:
+   The API key is managed via `AuthPlugin.kt`. Open [AuthPlugin.kt](file:///home/wahid/AndroidStudioProjects/NewsCMP/shared/src/commonMain/kotlin/com/wahid/newscmp/utils/AuthPlugin.kt) and update the `apiKey` value:
+   ```kotlin
+   val AuthPlugin = createClientPlugin("authPlugin"){
+       onRequest { request, content ->
+           request.url.parameters.append("apiKey", "YOUR_API_KEY_HERE")
+       }
+   }
+   ```
+
+3. **Build and Run**:
+   - For Android: Run the `androidApp` configuration.
+   - For iOS: Open `iosApp/iosApp.xcworkspace` in Xcode or run from Android Studio using the Kotlin Multiplatform Mobile plugin.
+
+## 🤖 CI/CD
+
+The project includes GitHub Actions workflows for automated builds:
+- `android.yml`: Android build and tests.
+- `ios.yml`: iOS build and framework generation.
+- `build.yml`: General multiplatform build check.
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="screenshots/Screenshot_20260624_001203.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001236.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001256.png" width="30%" />
+</p>
+<p align="center">
+  <img src="screenshots/Screenshot_20260624_001308.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001318.png" width="30%" />
+  <img src="screenshots/Screenshot_20260624_001328.png" width="30%" />
+</p>
+<p align="center">
+  <img src="screenshots/Screenshot_20260624_001354.png" width="30%" />
+</p>
+
+## 🎬 Demo
+
+Check out the app in action:
+
+[Watch the demo video](screenshots/newsAppDemo.mp4)
+
+## 📄 License
+
+This project is licensed under the MIT License.

@@ -20,6 +20,10 @@ class NewsLocalDatasourceImpl(
         dao.upsert(items = items)
     }
 
+    override suspend fun insert(item: ArticleEntity) {
+        dao.upsert(item = item)
+    }
+
     override fun getFavoriteNews(): Flow<List<ArticleEntity>> {
         return dao.getAllFavoriteNews()
     }

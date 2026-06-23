@@ -10,5 +10,5 @@ class GetHeadlinesUseCase(
     private val repository: NewsRepository
 ) {
     operator fun invoke(query: Map<String, String>): Flow<List<Article>> =
-        repository.getHeadLinesNews(queryFilter = query)
+        repository.getHeadLineArticles(queryFilter = query)
 }

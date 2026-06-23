@@ -7,5 +7,5 @@ data class AllNewsUIState(
     val news: List<Article> = emptyList(),
     val errorMessage: String? = null,
     val searchQuery: String = "",
-    val selectedCategory: String = "",
+    val selectedCategory: String = "General",
 )

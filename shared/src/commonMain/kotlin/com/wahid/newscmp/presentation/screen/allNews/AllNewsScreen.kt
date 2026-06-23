@@ -27,6 +27,7 @@ import com.wahid.newscmp.domain.model.Article
 import com.wahid.newscmp.presentation.screen.component.AppSearchBar
 import com.wahid.newscmp.presentation.screen.component.ArticleListItem
 import com.wahid.newscmp.presentation.screen.component.CategoryFilterRow
+import com.wahid.newscmp.presentation.screen.component.EmptyCategory
 import com.wahid.newscmp.presentation.screen.component.ErrorState
 import com.wahid.newscmp.presentation.screen.component.FeaturedCard
 import com.wahid.newscmp.presentation.screen.component.SectionLabel
@@ -40,13 +41,13 @@ import com.wahid.newscmp.utils.Colors.ColorDivider
 fun AllNewsScreen(
     state: AllNewsUIState,
     onBookmarkClick: (Article) -> Unit = {},
+    onArticleClick: (Article) -> Unit,
     searchQuery: String = "",
     onQueryChange: (String) -> Unit,
     onClearClick: () -> Unit,
     onSearch: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Surface(
         color = ColorBackground,
         modifier = modifier
@@ -68,7 +69,10 @@ fun AllNewsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            CategoryFilterRow(categories = categories, selectedCategory, { selectedCategory = it })
+            CategoryFilterRow(categories = categories, selectedCategory, {
+                onQueryChange(it)
+                selectedCategory = it
+            })
             AppSearchBar(
                 query = searchQuery,
                 onSearch = onSearch,
@@ -89,18 +93,19 @@ fun AllNewsScreen(
                 }
 
                 else -> {
-                    ArticleListContent(
-                        articles = state.news,
-                        featured = state.news[0],
-                        onArticleClick = {
-
-                        },
-                        onBookmarkClick = onBookmarkClick,
-                        innerPadding = PaddingValues(12.dp)
-                    )
+                    val news = state.news
+                    if (news.isNotEmpty()) {
+                        ArticleListContent(
+                            articles = news,
+                            featured = news[0],
+                            onArticleClick = onArticleClick,
+                            onBookmarkClick = onBookmarkClick,
+                            innerPadding = PaddingValues(12.dp)
+                        )
+                    } else {
+                        EmptyCategory("")
+                    }
                 }
-
-
             }
 
         }

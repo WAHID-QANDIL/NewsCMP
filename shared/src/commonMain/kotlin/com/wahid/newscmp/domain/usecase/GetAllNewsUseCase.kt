@@ -12,5 +12,13 @@ class GetAllNewsUseCase(
     operator fun invoke(
         query: Map<String, String>,
         forceFetch: Boolean
-    ): Flow<List<Article>> = repository.getAllNews(queryFilter = query, forceFetch)
+    ): Flow<List<Article>> {
+        val queryFilter = mutableMapOf<String, String>()
+        queryFilter.apply { this += query }
+
+        if (queryFilter.contains("q").not()) {
+            queryFilter["q"] = "General"
+        }
+        return repository.getAllArticles(queryFilter = query, forceFetch)
+    }
 }

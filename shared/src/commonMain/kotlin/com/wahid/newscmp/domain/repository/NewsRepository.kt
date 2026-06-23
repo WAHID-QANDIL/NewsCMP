@@ -5,7 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
-    fun getAllNews(queryFilter: Map<String, String>,forceFetch: Boolean): Flow<List<Article>>
-    fun getHeadLinesNews(queryFilter: Map<String, String>): Flow<List<Article>>
+    fun getAllArticles(queryFilter: Map<String, String>, forceFetch: Boolean): Flow<List<Article>>
+    fun getHeadLineArticles(queryFilter: Map<String, String>): Flow<List<Article>>
+
+
+    fun getFavoriteArticles(): Flow<List<Article>>
+
+    suspend fun addToFavorite(article: Article)
+    suspend fun removeFromFavorite(article: Article)
 
 }

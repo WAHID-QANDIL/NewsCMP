@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Article(
     val id: String,
     val author: String,
-    val isFavorite: Boolean,
+    var isFavorite: Boolean,
     val content: String,
     val description: String,
     val publishedAt: String,

@@ -7,6 +7,7 @@ interface NewsLocalDatasource {
 
     fun getAllNews(): Flow<List<ArticleEntity>>
     suspend fun insert(items:List<ArticleEntity>)
+    suspend fun insert(item:ArticleEntity)
     fun getFavoriteNews(): Flow<List<ArticleEntity>>
     fun isFavoriteNews(id: Long): Flow<Boolean>
 
