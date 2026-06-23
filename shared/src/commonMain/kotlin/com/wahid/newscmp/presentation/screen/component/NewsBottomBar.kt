@@ -10,8 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.Heart
-import com.composables.icons.lucide.HeartCrack
-import com.composables.icons.lucide.HeartOff
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.MessageCircleHeart
 import com.composables.icons.lucide.Newspaper

@@ -29,16 +29,18 @@ class NesRepositoryImpl(
     private val newsLocalDatasource: NewsLocalDatasource,
     @IODispatcher private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : NewsRepository {
-    override fun getAllNews(queryFilter: Map<String, String>,forceFetch: Boolean): Flow<List<Article>> = flow {
+    override fun getAllNews(
+        queryFilter: Map<String, String>,
+        forceFetch: Boolean
+    ): Flow<List<Article>> = flow {
         // The collector should flowOn(IO) dispatcher
         val articleEntities = newsLocalDatasource.getAllNews().first()
-        if (!forceFetch){
-            if (articleEntities.isNotEmpty()) {
-                val lastUpdate = articleEntities[0].lastUpdate
-                if (lastUpdate + CACHE_TIMEOUT > Clock.System.now()) {
-                    emit(articleEntities.map { it.toDomainModel() })
-                    return@flow
-                }
+
+        if (articleEntities.isNotEmpty() && !forceFetch) {
+            val lastUpdate = articleEntities[0].lastUpdate
+            if (lastUpdate + CACHE_TIMEOUT > Clock.System.now()) {
+                emit(articleEntities.map { it.toDomainModel() })
+                return@flow
             }
         }
 
@@ -76,7 +78,8 @@ class NesRepositoryImpl(
     */
     override fun getHeadLinesNews(queryFilter: Map<String, String>): Flow<List<Article>> = flow {
         val articles =
-            newsRemoteDatasource.getHeadlinesNews(query = queryFilter).getOrThrow().articles?.mapNotNull { article ->
+            newsRemoteDatasource.getHeadlinesNews(query = queryFilter)
+                .getOrThrow().articles?.mapNotNull { article ->
                 article?.toDomainModel()
             }
         articles?.let {

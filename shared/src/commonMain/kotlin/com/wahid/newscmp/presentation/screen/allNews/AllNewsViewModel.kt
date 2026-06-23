@@ -9,14 +9,13 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.io.IOException
@@ -37,27 +36,24 @@ class AllNewsViewModel(
 
     init {
         viewModelScope.launch {
-            state.stateIn(
-                viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000.milliseconds),
-                initialValue = AllNewsUIState()
-            ).debounce(3000.milliseconds)
+            state.map { it.searchQuery  }
+                .debounce(2000.milliseconds)
                 .distinctUntilChanged()
-                .collect {
-                    forceFetch(mapOf("q" to it.searchQuery), true)
+                .filter { it.isNotBlank() }
+                .collectLatest {
+                    forceFetch(mapOf("q" to it), true)
                 }
         }
 
-//        fetch(emptyMap())
-        forceFetch(
+        fetch(
             buildMap {
                 put(
                     key = "q",
-                    value = "business"
+                    value = state.value.selectedCategory
                 )
-            },
-            forceFetch = true
+            }
         )
+
     }
 
     fun onIntent(intent: AllNewsIntent) {
@@ -67,20 +63,6 @@ class AllNewsViewModel(
                     it.copy(searchQuery = intent.newQuery)
                 }
             }
-
-            AllNewsIntent.Search -> {
-                onSearch()
-            }
-        }
-    }
-
-    private fun onSearch() {
-        viewModelScope.launch {
-            state.debounce(3000.milliseconds)
-                .distinctUntilChanged()
-                .collect {
-                    forceFetch(mapOf("q" to it.searchQuery), true)
-                }
         }
     }
 
@@ -94,7 +76,7 @@ class AllNewsViewModel(
                 it.copy(isLoading = true)
             }
             try {
-                getAllNewsUseCase(query = newQuery, forceFetch = false)
+                getAllNewsUseCase(query = newQuery, forceFetch = forceFetch)
                     .catch { error ->
                         localState.update {
                             it.copy(isLoading = false, errorMessage = error.message)
