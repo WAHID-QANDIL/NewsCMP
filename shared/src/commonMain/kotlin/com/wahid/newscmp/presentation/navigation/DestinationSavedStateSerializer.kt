@@ -12,6 +12,7 @@ object DestinationSavedStateSerializer {
             subclass(StackEntries.AllNews::class, StackEntries.AllNews.serializer())
             subclass(StackEntries.Headlines::class, StackEntries.Headlines.serializer())
             subclass(StackEntries.FavoriteNews::class, StackEntries.FavoriteNews.serializer())
+            subclass(StackEntries.Details::class, StackEntries.Details.serializer())
         }
     }
 

@@ -1,13 +1,8 @@
 package com.wahid.newscmp.presentation.navigation
 
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -17,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,6 +27,12 @@ import com.wahid.newscmp.presentation.screen.allNews.AllNewsViewModel
 import com.wahid.newscmp.presentation.screen.allNews.NewsTab
 import com.wahid.newscmp.presentation.screen.component.NewsBottomBar
 import com.wahid.newscmp.presentation.screen.component.NewsTopBar
+import com.wahid.newscmp.presentation.screen.details.DetailsScreen
+import com.wahid.newscmp.presentation.screen.favorites.FavoriteScreenIntent
+import com.wahid.newscmp.presentation.screen.favorites.FavoriteViewmodel
+import com.wahid.newscmp.presentation.screen.favorites.FavoritesScreen
+import com.wahid.newscmp.presentation.screen.headlines.HeadlinesScreen
+import com.wahid.newscmp.presentation.screen.headlines.HeadlinesViewmodel
 import com.wahid.newscmp.utils.Colors.ColorBackground
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
@@ -92,7 +92,26 @@ fun AppNavigationHost(modifier: Modifier = Modifier) {
                             top = 70.dp
                         ),
                         state = state,
-                        onBookmarkClick = { TODO() },
+                        onBookmarkClick = { article ->
+                            val isFavorite = article.isFavorite
+                            when {
+                                isFavorite -> {
+                                    viewModel.onIntent(
+                                        intent = AllNewsIntent.RemoveToFavorite(
+                                            article
+                                        )
+                                    )
+                                }
+
+                                !isFavorite -> {
+                                    viewModel.onIntent(
+                                        intent = AllNewsIntent.AddToFavorite(
+                                            article
+                                        )
+                                    )
+                                }
+                            }
+                        },
                         searchQuery = state.searchQuery,
                         onQueryChange = {
                             viewModel.onIntent(
@@ -104,47 +123,74 @@ fun AppNavigationHost(modifier: Modifier = Modifier) {
                         onClearClick = {
                             viewModel.onIntent(
                                 intent = AllNewsIntent.SearchQueryChange(
-                                    ""
+                                    "General"
                                 )
                             )
                         },
-                        onSearch = { },
+                        onSearch = {
+
+                        },
+                        onArticleClick = { article ->
+                            backStack.add(StackEntries.Details(article))
+                        }
                     )
                 }
-                entry<StackEntries.Headlines> { entry ->
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                entry<StackEntries.Headlines> {
+                    val viewmodel = metroViewModel<HeadlinesViewmodel>()
+                    val state by viewmodel.state.collectAsStateWithLifecycle()
 
-                    }
+                    HeadlinesScreen(
+                        articles = state.headlines,
+                        onArticleClick = {
+                                backStack.add(StackEntries.Details(article = it))
+                        },
+                        modifier = Modifier.padding(vertical = 70.dp)
+                    )
                 }
                 entry<StackEntries.FavoriteNews> {
+                    val viewModel = metroViewModel<FavoriteViewmodel>()
+                    val state by viewModel.state.collectAsStateWithLifecycle()
+                    FavoritesScreen(
+                        articles = state.favoriteArticles,
+                        onRemoveFavorite = {
+                            viewModel.onIntent(
+                                intent = FavoriteScreenIntent.RemoveFavorite(
+                                    it.copy(isFavorite = false)
+                                )
+                            )
+                        },
+                        onArticleClick = {
+                            backStack.add(StackEntries.Details(it))
+                        },
+                        modifier = Modifier.padding(vertical = 70.dp)
+                    )
+                }
+                entry<StackEntries.Details> {
+                    DetailsScreen(
+                        article = it.article,
+                        onBack = {
+                            backStack.removeLastOrNull()
+                        },
+                        modifier = Modifier.padding(vertical = 80.dp)
+                    )
+
 
                 }
             },
-
             transitionSpec = {
-                // Slide in from right when navigating forward
-                slideInHorizontally(initialOffsetX = { it }) togetherWith
-                        slideOutHorizontally(targetOffsetX = { -it })
+                slideInVertically(
+                    initialOffsetY = { it }
+                ) togetherWith slideOutVertically(
+                    targetOffsetY = { -it }
+                )
             },
             popTransitionSpec = {
-                // Slide in from left when navigating back
-                // slideInHorizontally(initialOffsetX = { -it }) togetherWith slideOutHorizontally(targetOffsetX = { it })
-
-                // Slide new content up, keeping the old content in place underneath
                 slideInVertically(
-                    initialOffsetY = { it },
-                    animationSpec = tween(700)
-                ) togetherWith ExitTransition.KeepUntilTransitionsFinished
-            },
-            predictivePopTransitionSpec = {
-                // Slide in from left when navigating back
-                slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                        slideOutHorizontally(targetOffsetX = { it })
-            },
+                    initialOffsetY = { -it }
+                ) togetherWith slideOutVertically(
+                    targetOffsetY = { it }
+                )
+            }
         )
 
     }
